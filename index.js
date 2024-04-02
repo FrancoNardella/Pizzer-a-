@@ -1,7 +1,7 @@
 const pizzas = [
   {
     id: 1,
-    nombre: "pizza de Muzzarella",
+    nombre: "Pizza de Muzzarella",
     precio: 500,
     ingredientes: ["Muzzarella", "Tomate", "Aceitunas"],
     imagen: "./img/muzzarella.png",
@@ -9,7 +9,7 @@ const pizzas = [
 
   {
     id: 2,
-    nombre: "pizza de Cebolla",
+    nombre: "Pizza de Cebolla",
     precio: 1500,
     ingredientes: ["Muzzarella", "Tomate", "Cebolla"],
     imagen: "./img/cebolla.png",
@@ -17,7 +17,7 @@ const pizzas = [
 
   {
     id: 3,
-    nombre: "pizza 4 Quesos",
+    nombre: "Pizza 4 Quesos",
     precio: 1380,
     ingredientes: [
       "Muzzarella",
@@ -31,7 +31,7 @@ const pizzas = [
 
   {
     id: 4,
-    nombre: "pizza Especial",
+    nombre: "Pizza Especial",
     precio: 1000,
     ingredientes: ["Muzzarella", "Tomate", "Rucula", "Jamón"],
     imagen: "./img/especial.png",
@@ -39,9 +39,146 @@ const pizzas = [
 
   {
     id: 5,
-    nombre: "pizza con Anana",
+    nombre: "Pizza con Anana",
     precio: 600,
     ingredientes: ["Muzzarella", "Tomate", "Anana"],
     imagen: "./img/anana.png",
   },
 ];
+
+const registerForm=document.querySelector("#register_form");
+const numberInput = document.querySelector("#number");
+
+//Funciones Auxiliares
+const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
+
+//Permite almacenar datos en el storage
+const saveToLocalStorage = () => {
+  localStorage.setItem("pedidos", JSON.stringify(pedidos));
+};
+
+//Chequeamos si el campo está vacío
+const isEmpty = (input) => {
+  return !input.value.trim().length;
+};
+
+const isBetween = (input, min, max) => {
+   return input.value.length >= min && input.value.length < max;
+};
+
+//Validamos si el número ingresado existe
+const isNumberValid = (input) => {
+  const re = /^[1-5]{1}$/;
+  //testeamos
+  return re.test(input.value.trim());
+};
+
+// Mostrar error al validar el input
+const showError = (input, message) => {
+  const formField = input.parentElement;
+  formField.classList.remove("success");
+  formField.classList.add("error");
+  const error = formField.querySelector("small");
+  error.style.display = "block";
+  error.textContent = message;
+};
+const showSuccess = (input) => {
+  const formField = input.parentElement;
+  formField.classList.remove("error");
+  formField.classList.add("success");
+  const error = formField.querySelector("small");
+
+  error.textContent = "";
+};
+
+//Validamos el input
+const checkNumberInput = (input) => {
+  let valid = false;
+  if (isEmpty(input)) {
+    showError(input, "Debe elegír un número");
+    return;
+  }
+  if (!isNumberValid(input)) {
+    showError(input, "El número ingresado no es valido");
+    return;
+  }
+
+  showSuccess(input);
+  valid = true;
+  return valid;
+};
+
+// Validación general y almacenamiento de los datos
+const validateForm = (e) => {
+  e.preventDefault();
+
+  //Almacenamos en variables el estado de los inputs
+
+  let isNumberValid = checkNumberInput(numberInput);
+
+  let isValidForm = isNumberValid;
+
+  if (isValidForm) {
+    const pizzaNumber = parseInt(numberInput.value);
+    const pizza = pizzas.find((pizza) => pizza.id === pizzaNumber);
+
+    if (pizza) {
+      pedidos.push(pizza);
+      saveToLocalStorage(pedidos);
+      alert("Pizza seleccionada con éxito!");
+      // window.location.href="login.html";
+    } else {
+      alert("No se encontró ninguna pizza con ese número.");
+    }
+    
+    // window.location.href="login.html";
+  }
+};
+
+//Funcion para inicializar
+const init = () => {
+  registerForm.addEventListener("submit", validateForm);
+  numberInput.addEventListener("input", () => checkNumberInput(numberInput));
+};
+
+init();
+
+
+
+//POP-UP
+
+// Agregamos un evento de escucha al input para que cada vez que cambie, se muestre el pop-up con los detalles de la pizza
+numberInput.addEventListener("input", () => {
+  // Obtenemos el número de la pizza ingresado por el usuario
+  const pizzaNumber = parseInt(numberInput.value);
+  const pizza = pizzas.find((pizza) => pizza.id === pizzaNumber);
+  
+  if (pizza) {
+    const popupContent = `
+      <div>
+        <img src="${pizza.imagen}" alt="${pizza.nombre}" />
+        <h3>${pizza.nombre}</h3>
+        <p>Precio: $${pizza.precio}</p>
+        <p>Ingredientes: ${pizza.ingredientes.join(", ")}</p>
+      </div>
+    `;
+    // Creamos un elemento div para el pop-up
+    const popup = document.createElement("div");
+    popup.classList.add("popup");
+    // Agregamos el contenido al pop-up
+    popup.innerHTML = popupContent;
+    // Agregamos el pop-up al cuerpo del documento
+    document.body.appendChild(popup);
+  } else {
+    
+    removePopup();
+  }
+});
+
+// Función para eliminar el pop-up
+function removePopup() {
+  const popup = document.querySelector(".popup");
+  if (popup) {
+    popup.remove();
+  }
+}
