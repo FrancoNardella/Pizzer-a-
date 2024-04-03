@@ -48,6 +48,9 @@ const pizzas = [
 
 const registerForm=document.querySelector("#register_form");
 const numberInput = document.querySelector("#number");
+// const containerCards = document.querySelector(".card_info_conteiner");
+// const card = document.querySelector(".cards")
+// const succes = document.querySelector(".exito");
 
 //Funciones Auxiliares
 const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
@@ -96,10 +99,14 @@ const checkNumberInput = (input) => {
   let valid = false;
   if (isEmpty(input)) {
     showError(input, "Debe elegír un número");
+    // card.style.display = 'none'
+    // succes.style.display = 'none'
     return;
   }
   if (!isNumberValid(input)) {
     showError(input, "El número ingresado no es valido");
+    // card.style.display = 'none'
+    // succes.style.display = 'none'
     return;
   }
 
@@ -125,6 +132,22 @@ const validateForm = (e) => {
     if (pizza) {
       pedidos.push(pizza);
       saveToLocalStorage(pedidos);
+      // const createCardHTML = () => {
+      //   return `
+      //   <div>
+      //   <img src="${pizza.imagen}" alt="${pizza.nombre}" />
+      //   <h3>${pizza.nombre}</h3>
+      //   <ul>
+      //   <li><span>Precio:</span> $${pizza.precio}</li>
+      //   <li><span>Ingredientes:</span> ${pizza.ingredientes.join(", ")}</li>
+      //   </ul>
+        
+      //   </div>
+      // `;
+      // }
+      // containerCards.innerHTML = createCardHTML();
+      // card.style.display = 'flex'
+      // succes.style.display = 'flex'
       alert("Pizza seleccionada con éxito!");
       // window.location.href="login.html";
     } else {
