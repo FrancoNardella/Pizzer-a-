@@ -46,11 +46,11 @@ const pizzas = [
   },
 ];
 
-const registerForm=document.querySelector("#register_form");
+const registerForm = document.querySelector("#register_form");
 const numberInput = document.querySelector("#number");
-// const containerCards = document.querySelector(".card_info_conteiner");
-// const card = document.querySelector(".cards")
-// const succes = document.querySelector(".exito");
+const containerCards = document.querySelector(".card_info_conteiner");
+const card = document.querySelector(".cards");
+const succes = document.querySelector(".exito");
 
 //Funciones Auxiliares
 const pedidos = JSON.parse(localStorage.getItem("pedidos")) || [];
@@ -66,7 +66,7 @@ const isEmpty = (input) => {
 };
 
 const isBetween = (input, min, max) => {
-   return input.value.length >= min && input.value.length < max;
+  return input.value.length >= min && input.value.length < max;
 };
 
 //Validamos si el número ingresado existe
@@ -99,14 +99,14 @@ const checkNumberInput = (input) => {
   let valid = false;
   if (isEmpty(input)) {
     showError(input, "Debe elegír un número");
-    // card.style.display = 'none'
-    // succes.style.display = 'none'
+    card.style.display = "none";
+    succes.style.display = "none";
     return;
   }
   if (!isNumberValid(input)) {
     showError(input, "El número ingresado no es valido");
-    // card.style.display = 'none'
-    // succes.style.display = 'none'
+    card.style.display = "none";
+    succes.style.display = "none";
     return;
   }
 
@@ -132,28 +132,28 @@ const validateForm = (e) => {
     if (pizza) {
       pedidos.push(pizza);
       saveToLocalStorage(pedidos);
-      // const createCardHTML = () => {
-      //   return `
-      //   <div>
-      //   <img src="${pizza.imagen}" alt="${pizza.nombre}" />
-      //   <h3>${pizza.nombre}</h3>
-      //   <ul>
-      //   <li><span>Precio:</span> $${pizza.precio}</li>
-      //   <li><span>Ingredientes:</span> ${pizza.ingredientes.join(", ")}</li>
-      //   </ul>
+      const createCardHTML = () => {
+        return `
+        <div>
+          <img src="${pizza.imagen}" alt="${pizza.nombre}" />
+          <h3>${pizza.nombre}</h3>
+          <ul>
+            <li><span>Precio:</span> $${pizza.precio}</li>
+            <li><span>Ingredientes:</span> ${pizza.ingredientes.join(", ")}</li>
+          </ul>
         
-      //   </div>
-      // `;
-      // }
-      // containerCards.innerHTML = createCardHTML();
-      // card.style.display = 'flex'
-      // succes.style.display = 'flex'
-      alert("Pizza seleccionada con éxito!");
+        </div>
+      `;
+      };
+      containerCards.innerHTML = createCardHTML();
+      card.style.display = "flex";
+      succes.style.display = "flex";
+      // alert("Pizza seleccionada con éxito!");
       // window.location.href="login.html";
     } else {
       alert("No se encontró ninguna pizza con ese número.");
     }
-    
+
     // window.location.href="login.html";
   }
 };
@@ -166,16 +166,14 @@ const init = () => {
 
 init();
 
-
-
 //POP-UP
 
 // Agregamos un evento de escucha al input para que cada vez que cambie, se muestre el pop-up con los detalles de la pizza
-numberInput.addEventListener("input", () => {
+/*numberInput.addEventListener("input", () => {
   // Obtenemos el número de la pizza ingresado por el usuario
   const pizzaNumber = parseInt(numberInput.value);
   const pizza = pizzas.find((pizza) => pizza.id === pizzaNumber);
-  
+
   if (pizza) {
     const popupContent = `
       <div>
@@ -193,7 +191,6 @@ numberInput.addEventListener("input", () => {
     // Agregamos el pop-up al cuerpo del documento
     document.body.appendChild(popup);
   } else {
-    
     removePopup();
   }
 });
@@ -205,3 +202,4 @@ function removePopup() {
     popup.remove();
   }
 }
+*/
